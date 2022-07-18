@@ -1,0 +1,21 @@
+---
+- name: Remove history and set date time
+  become: false
+  hosts: crunchify-group
+  tasks:
+     
+     - name: Create history file.
+       shell: touch /tmp/bash_history
+       
+     - name: Add export... + path of the new history file.
+       shell: echo "export CUSTOM_HISTFILE='/tmp/bash_history'" >> /home/{{ ansible_user_id }}/.bashrc
+       register: command_output
+       
+     - name: Add export... to show the directory where the command has been typed, the date, and the command.
+       shell: echo "export PROMPT_COMMAND=\"history -a; history -c; history -r; date +%s | xargs echo -n >>\$CUSTOM_HISTFILE; echo -n ' - ' >>\$CUSTOM_HISTFILE; pwd | xargs echo -n >>\$CUSTOM_HISTFILE; echo -n ' - ' >>\$CUSTOM_HISTFILE; tail -n 1 \$HISTFILE >>\$CUSTOM_HISTFILE; \$PROMPT_COMMAND\"" >> /home/{{ ansible_user_id }}/.bashrc
+       register: command_output
+     
+     - name: Save and run bashrc
+       shell: source /home/{{ ansible_user_id }}/.bashrc
+       args:
+                executable: /bin/bash
