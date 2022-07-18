@@ -18,8 +18,8 @@ choose = input()
 
 if choose == '1':
 	args = ["ansible-playbook", "-b", "-v", "Setup.yml", "--extra-var", "\"crunchify-group\"", "-i", "crunchify-hosts"]
-	Set_DateTime = Popen(args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-	output = Set_DateTime.communicate()
+	Setup = Popen(args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+	output = Setup.communicate()
 	print(output)
 
 if choose == '2':
